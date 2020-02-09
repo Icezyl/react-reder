@@ -1,0 +1,51 @@
+.infomey {
+  position: relative;
+  width: calc(100vw);
+  padding: 0.8rem 0.5rem;
+  display: flex;
+  flex-shrink: 0;
+  .infomey_headerImg {
+    height: 3.5rem;
+    width: 3.5rem;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
+  .infomey_text {
+    width: calc(100% - 22px - 3.5rem);
+    margin-left: 1rem;
+    padding: 0.1rem 0;
+    font-size: 1.2rem;
+    .infomey_top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      .infomey_name {
+        font-size: 18px;
+      }
+      .infomey_time {
+        font-size: 16px;
+        color: #808080;
+      }
+    }
+    .infomey_bottom {
+      display: flex;
+      justify-content: space-between;
+      .infomey_newtext {
+        color: #808080;
+        font-size: 16px;
+      }
+      .infomey_see {
+        background:red;
+        font-size: 14px;
+        color: white;
+        line-height: 16px;
+        height: 16px;
+        padding: 0px 4px;
+        border-radius: 10px;
+      }
+    }
+  }
+}

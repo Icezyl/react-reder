@@ -9,21 +9,21 @@ const Message = (props) => {
     mes()
   }, [])
   function mes() {
-    api.messageFindId(state.id).then(res => {
-      console.log(res.data.list)
+    api.messageFindId( state.id ).then(res => {
+      console.log(res.list)
       dispatch({
         type: 'setMessageList',
-        payload: { messageList: res.data.list }
+        payload: { messageList: res.list }
       })
     })
   }
   return state.messageList ? (
     <div className='message'>
       {state.messageList.map((item, index) => {
-        return <InfoMeg list={item} key ={index} onValueId={(e)=> {
+        return <InfoMeg list={item} key={index} onValueId={(e) => {
           console.log(e)
           props.history.push(`/chat/${e.name}/${e.id}`)
-        }}/>
+        }} />
       })}
 
     </div>

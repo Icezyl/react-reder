@@ -37,7 +37,7 @@ const InfoMeg = (props) => {
         </div>
         <div className='infomey_bottom'>
           <span className='infomey_newtext'>{props.list.arr.text}</span>
-          <span className='infomey_see'>{props.list.see}</span>
+          {props.list.see === 0 ? '' : <span className='infomey_see'>{props.list.see}</span>}
         </div>
       </div>
     </div>

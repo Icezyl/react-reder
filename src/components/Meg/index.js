@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import './style.less'
 import { Button } from 'antd-mobile';
 const Meg = (props) => {
-  // console.log(props)
+  
   return (
     <div className={!props.button ? 'on mey' : 'mey'} onClick={() => {
       if (props.onValueId) {

@@ -5,9 +5,10 @@ export const AppContext = React.createContext();
 export const initial = {
   user: {},
   tabBarList: [
-    { 'icon': 'https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg', 'selectedIcon': 'https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg', 'title': '消息', 'key': 'message', 'route': '/' },
-    { 'icon': 'https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg', 'selectedIcon': 'https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg', 'title': '联系人', 'key': 'friends', 'route': '/friends' },
-    { 'icon': 'https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg', 'selectedIcon': 'https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg', 'title': '我的', 'key': 'my', 'route': '/my' }],
+    { 'icon': 'icon-shouye', 'selectedIcon': 'icon-shouye1', 'title': '首页', 'key': 'message', 'route': '/' },
+    { 'icon': 'icon-xiaoxi-copy', 'selectedIcon': 'icon-xiaoxi-copy', 'title': '消息', 'key': 'message', 'route': '/message' },
+    { 'icon': 'icon-lianxiren', 'selectedIcon': 'icon-lianxiren1', 'title': '联系人', 'key': 'friends', 'route': '/friends' },
+    { 'icon': 'icon-wode', 'selectedIcon': 'icon-wode', 'title': '我的', 'key': 'my', 'route': '/my' }],
   count: 0,
   id: sessionStorage.getItem('id') ? sessionStorage.getItem('id') : '',
   token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '',

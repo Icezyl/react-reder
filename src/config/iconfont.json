@@ -1,0 +1,72 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1718359",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "f0350",
+      "unicode_decimal": 983888
+    },
+    {
+      "icon_id": "1847606",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
+      "icon_id": "4889646",
+      "name": "编辑",
+      "font_class": "bianji1",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "5601922",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "8809479",
+      "name": "联系人",
+      "font_class": "lianxiren",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "10174558",
+      "name": "消 息",
+      "font_class": "xiaoxi-copy",
+      "unicode": "e50d",
+      "unicode_decimal": 58637
+    },
+    {
+      "icon_id": "12246981",
+      "name": "联系人",
+      "font_class": "lianxiren1",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "12667730",
+      "name": "首 页",
+      "font_class": "shouye",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
+      "icon_id": "13040092",
+      "name": "首页",
+      "font_class": "shouye1",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    }
+  ]
+}

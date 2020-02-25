@@ -7,22 +7,20 @@ const Personal = (props) => {
   const [state] = useContext(AppContext)
   const [data, setData] = useState()
   useEffect(() => {
-    userInfo()
+    user()
   }, [])
 
-  function userInfo() {
-    api.personal(state.id, props.match.params.id).then(res => {
-      console.log(res.data)
-      setData(res.data)
+  function user() {
+    api.personal({ myId: state.id, youId: props.match.params.id }).then(res => {
+      console.log(res)
+      setData(res)
     })
   }
   function onButton(success) {
     if (success) {
-      console.log(1)
-      props.history.push(`/chat/${data.userinfo.username}/${props.match.params.id}`)
-      // 跳转xx
+      props.history.push(`/chat/${data.user.username}/${props.match.params.id}`)
     } else {
-      api.add(state.id, props.match.params.id).then(res => {
+      api.add({ myId: state.id, youId: props.match.params.id }).then(res => {
         Toast.info(res.msg, 2, null, false)
       })
     }
@@ -37,9 +35,9 @@ const Personal = (props) => {
         }}
       >个人资料</NavBar>
       <Result
-        img={<img src={data.userinfo.avatar} alt='' className='result_img'></img>}
-        title={data.userinfo.username}
-        message={<div>{data.userinfo.sex ? '男' : '女'}</div>}
+        img={<img src={data.user.avatar} alt='' className='result_img'></img>}
+        title={data.user.username}
+        message={<div>{data.user.sex ? '男' : '女'}</div>}
       ></Result>
 
       <div className='button'>

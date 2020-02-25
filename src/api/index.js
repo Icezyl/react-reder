@@ -1,56 +1,122 @@
-import axios from './axios';
+import axios from './axios'
 
 const API = {
-  async login(name, paw) {
-    return await axios.post('user/login', {
-      'username': name,
-      'password': paw
+  retrieve(data) {
+    return axios({
+      url: 'users/retrieve',
+      method: 'put',
+      data
     })
   },
-  res(name, paw) {
-    return axios.post('user/register', {
-      'username': name,
-      'password': paw
+  login(data) {
+    return axios({
+      url: 'users/login',
+      method: 'post',
+      data
     })
   },
-  friends(id) {
-    return axios.post('friend/find', {
-      'id': id
+  res(data) {
+    return axios({
+      url: 'users/register',
+      method: 'post',
+      data
     })
   },
-  news(id) {
-    return axios.post('friend/news', {
-      'id': id
+  friends(data) {
+    return axios({
+      url: 'friend/',
+      method: 'get',
+      params: data
     })
   },
-  userFind(id) {
-    return axios.get('user/find', {
-      'id': id
+  news(data) {
+    return axios({
+      url: 'friend/news',
+      method: 'get',
+      params: data
+    })
+  },
+  users(data) {
+    return axios({
+      url: 'users',
+      method: 'get',
+      params: data
     })
   },
   search(name) {
-    return axios.get('friend/search', {
-      'name': name
+    return axios({
+      url: `friend/search/${name}`,
+      method: 'get'
     })
   },
-  personal(id, youId) {
-    return axios.post('friend/personal', {
-      'id': id, 'youId': youId
+  personal(data) {
+    return axios({
+      url: 'users',
+      method: 'get',
+      params: data
     })
   },
-  add(id, youId) {
-    return axios.post('/friend/add', {
-      'myId': id, 'youId': youId
+  add(data) {
+    return axios({
+      url: '/friend/add',
+      method: 'post',
+      data
     })
   },
-  agree(id) {
-    return axios.post('/friend/agree', {
-      id
+  agree(data) {
+    return axios({
+      url: '/friend/agree',
+      method: 'post',
+      data
     })
   },
   messageFindId(id) {
-    return axios.post('/message/findId', {
-      id
+    return axios({
+      url: `/message/${id}`,
+      method: 'get'
+    })
+  },
+  chat(id) {
+    return axios({
+      url: `/message/all/${id}`,
+      method: 'get'
+    })
+  },
+  update(id, data) {
+    return axios({
+      url: `/users/${id}`,
+      method: 'patch',
+      data
+    })
+  },
+  upload(data) {
+    return axios({
+      url: '/upload',
+      method: 'post',
+      data
+    })
+  },
+  sendEmail(data){
+    return axios({
+      url: '/email',
+      method: 'post',
+      data
+    })
+  },
+  yunToken() {
+    return axios({
+      url: '/yun',
+      method: 'post'
+    })
+  },
+  yunLoad(data) {
+    return axios({
+      url: 'http://up.qiniu.com',
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      method: 'post',
+      data
     })
   }
 }

@@ -1,40 +1,58 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { SearchBar } from 'antd-mobile'
-import { Meg } from '../../components'
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { SearchBar, Toast } from 'antd-mobile'
+import { AppContext } from '../../reducer'
 import api from '../../api'
+import './style.less'
 const Search = (props) => {
+  const [state, dispatch] = useContext(AppContext)
   const ser = useRef()
-  const [List, setList] = useState({ list: [] })
+  const [list, setList] = useState([])
+  const [hiddin, setHiddin] = useState(false)
   useEffect(() => {
-    ser.current.onFocus()
+    ser.current.focus()
   }, [])
   function onSearch(name) {
-    api.search(name).then(res => {
-      console.log(res)
-      setList(res)
-    })
+    if (name.trim()) {
+      api.search({ name, id: state.id }).then(res => {
+        setList(res)
+        setHiddin(true)
+      })
+    }
   }
   const [value, setValue] = useState()
+
+  const Info = props => {
+    return (
+      <div className='info' onClick={props.onClick}>
+        <div className='left_img'>
+          <img alt='' src={props.user.avatar}></img>
+        </div>
+        <p className='left_name'>{props.user.username}</p>
+      </div>
+    )
+  }
   return (
-    <div>
+    <div className='search'>
       <SearchBar
         ref={ser}
         value={value}
         placeholder="请输入用户名"
         onSubmit={value => onSearch(value)}
-        onClear={value => console.log(value, 'onClear')}
-        onFocus={() => console.log('onFocus')}
-        onBlur={() => { console.log('onBlur') }}
         onCancel={() => props.history.go(-1)}
         showCancelButton
+        onFocus={() => setHiddin(false)}
         onChange={(e) => { setValue(e) }}
       />
-      {List.list.map((item, index) => {
-        return <Meg key={index} list={item} onValueId={(id) => {
-          props.history.push(`/personal/${id}`)
-        }} />
-      })}
-
+      {
+        list.length ?
+          <div className='contacts'>
+            <p className='title'>联系人</p>
+            {list.map((item, index) => {
+              return <Info user={item} key={index}></Info>
+            })}
+          </div>
+          : <div hidden={!hiddin} style={{ textAlign: 'center', padding: '10px 0', color: '#888888' }}>没有找到相关内容</div>
+      }
     </div>
   )
 }

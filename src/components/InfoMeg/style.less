@@ -1,17 +1,27 @@
 .infomey {
   background: white;
   position: relative;
-  width: calc(100vw);
   padding: 0.8rem 0.5rem;
   display: flex;
   flex-shrink: 0;
   .infomey_headerImg {
-    height: 3.5rem;
-    width: 3.5rem;
+    position: relative;
+    height: 3.2rem;
+    width: 3.2rem;
     img {
       width: 100%;
       height: 100%;
       border-radius: 50%;
+    }
+    .infomey_state {
+      position: absolute;
+      bottom: 0;
+      right: 0.3rem;
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2ecc71;
     }
   }
   .infomey_text {
@@ -45,11 +55,10 @@
       }
       .infomey_see {
         background:red;
-        font-size: 14px;
+        font-size: 13px;
         color: white;
-        line-height: 16px;
-        height: 16px;
-        padding: 0px 4px;
+        line-height: 20px;
+        padding: 0px 6px;
         border-radius: 10px;
       }
     }

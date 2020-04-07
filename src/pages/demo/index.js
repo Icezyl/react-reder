@@ -1,54 +1,62 @@
-import React, { useState, useRef } from 'react'
-import plupload from 'plupload'
-import { ImagePicker, WingBlank, SegmentedControl } from 'antd-mobile';
-import './style.less'
-import axios from 'axios'
+import { PullToRefresh, ListView, Button } from 'antd-mobile';
+import React, { useState, useEffect } from 'react'
 import api from '../../api'
-const Demo = () => {
-  const [files, setFiles] = useState([{
-    url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-    id: '2121',
-  }])
-  const form = useRef()
-  const onChange = (files, type, index) => {
-    console.log(files, type, index);
-    setFiles(files)
+import DynamicTab from '../../components/dynamicTab'
+
+const G = () => {
+  const [refreshing, setRefreshing] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [list, setList] = useState()
+  const [page, setPage] = useState(1)
+  const [dataSource, setDataSource] = useState(new ListView.DataSource({
+    rowHasChanged: (row1, row2) => row1 !== row2,
+  }))
+  useEffect(() => {
+    onRefresh()
+  }, [])
+  function onRefresh() {
+    setRefreshing(true)
+    setIsLoading(true)
+    api.dyList({ page: 1 }).then(res => {
+      setIsLoading(false)
+      setRefreshing(false)
+      setList(res.list)
+      setDataSource(dataSource.cloneWithRows(res.list))
+    })
   }
-  const [img,setImg] =useState() 
+  function onEndReached(event) {
+    setPage(page => page + 1)
+    setIsLoading(true)
+    api.dyList({ page: page + 1 }).then(res => {
+      setIsLoading(false)
+      setList([...list, ...res.list])
+      setDataSource(dataSource.cloneWithRows([...list, ...res.list]))
+    })
+  }
+  const row = (rowData, sectionID, rowID) => {
+    return <div>
+      <DynamicTab list={rowData}></DynamicTab>
+    </div>
+  }
   return (
     <div>
-      <ImagePicker
-        length='2'
-        files={files}
-        onImageClick={(index, fs) => console.log(index, fs)}
-        onChange={onChange}
-        selectable={files.length < 2}
-        onAddImageClick={(e) => {
-          console.log(e)
-          const url = [{ url: e.url, id: '123' }]
-          setFiles(url)
+      <ListView
+        style={{
+          overflow: 'auto'
         }}
-        disableDelete
+        dataSource={dataSource}
+        renderRow={row}
+        useBodyScroll={true}
+        renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
+          {isLoading ? 'Loading...' : '到底了'}
+        </div>)}
+        pullToRefresh={<PullToRefresh
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />}
+        onEndReached={(event) => onEndReached(event)}
       />
-        <input name="file" type="file" accept='.jpg,.png' onChange={(e) => {
-          var formData = new FormData()
-          formData.append('file', e.target.files[0])
-          api.yun().then(res => {
-            formData.append('token', res.token)
-            axios({
-              method: 'post',
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              },
-              url: 'http://up.qiniu.com', data: formData
-            }).then(res => {
-              console.log(res.data)
-              setImg(res.data.hash)
-            })
-          })
-        }} />
-      <img src={'http://q5y12w23r.bkt.clouddn.com/'+img}></img>
     </div>
   )
 }
-export default Demo
+export default G

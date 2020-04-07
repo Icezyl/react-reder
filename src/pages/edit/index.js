@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { NavBar, DatePicker, List, Icon } from 'antd-mobile'
+import { NavBar, DatePicker, Picker, InputItem, List, Modal, Icon, Button, Toast } from 'antd-mobile'
 import { AppContext } from '../../reducer'
 import api from '../../api'
-import moment from 'moment'
-import axios from 'axios'
 import './style.less'
 const Edit = (props) => {
+  const alert = Modal.alert
   const Item = List.Item
+  const [count, setCount] = useState(0)
   const [state, dispatch] = useContext(AppContext)
   const [user, setUser] = useState({})
+  const [sValue, setsValue] = useState([])
   const file = useRef()
   useEffect(() => {
     userFind()
@@ -16,11 +17,13 @@ const Edit = (props) => {
   function userFind() {
     api.users({ _id: state.id }).then((res) => {
       setUser(res.user)
+      setsValue([res.user.sex])
     })
   }
   function update(data) {
     api.update(state.id, data).then(res => {
-      console.log(res)
+      Toast.info('修改成功', 2, null, false)
+      props.history.go(-1)
     })
   }
   function onChange(e) {
@@ -30,9 +33,10 @@ const Edit = (props) => {
       api.yunToken().then(res => {
         formData.append('token', res.token)
         api.yunLoad(formData).then(res => {
-          let img = 'http://q5y12w23r.bkt.clouddn.com/' + res.hash
+          let img = 'http://cdn.goodluck.video/' + res.hash
+          console.log(img)
           setUser({ ...user, avatar: img })
-          update({ avatar: img })
+          setCount(count + 1)
         })
       })
     }
@@ -41,7 +45,24 @@ const Edit = (props) => {
     <div className='edit'>
       <NavBar
         leftContent={<Icon type="left" />}
-        onLeftClick={() => { props.history.go(-1) }}
+        onLeftClick={() => {
+          if (count) {
+            alert('Delete', '确定返回吗?当前资料修改尚未保存,返回所有修改不会生效', [
+              { text: '取消', onPress: () => console.log('cancel') },
+              { text: '确定', onPress: () => props.history.go(-1) },
+            ])
+          }else {
+            props.history.go(-1)
+          }
+        }}
+        rightContent={[
+          <span key='0' onClick={() => {
+            if (count) {
+              update(user)
+              setCount(0)
+            }
+          }}>保存</span>
+        ]}
       >修改资料</NavBar>
       <div>
         <List>
@@ -57,24 +78,51 @@ const Edit = (props) => {
               <span className='edit_title'>修改头像</span>
             </div>
           </Item>
-          <Item extra={user.username}><span className='edit_title'>昵称</span></Item>
-          <Item extra={user.sex ? '男' : '女'}><span className='edit_title'>性别</span></Item>
+          <InputItem
+            placeholder="start from right"
+            value={user.username}
+            onChange={(e) => {
+              setUser({ ...user, username: e })
+              setCount(count + 1)
+              console.log(count)
+            }}
+          >
+            名称
+          </InputItem>
+          <Picker extra="请选择(可选)"
+            data={[[{ value: 0, label: '女' }, { value: 1, label: '男' }]]}
+            title="请选择"
+            cascade={false}
+            value={sValue}
+            onOk={e => {
+              setsValue(e)
+              setCount(count + 1)
+              setUser({ ...user, sex: e[0] })
+            }}
+          >
+            <Item>性别</Item>
+          </Picker>
           <DatePicker
             minDate={new Date(1920, 1, 1)}
             mode="date"
             title="请选择出生日期"
             value={new Date(user.birthday)}
             onChange={date => {
+              setCount(count + 1)
               setUser({ ...user, birthday: date })
-              update({ birthday: date })
             }}
           >
-            <Item><span className='edit_title'>出生</span></Item>
+            <Item>出生</Item>
           </DatePicker>
-          <Item extra={user.introduction ? user.introduction : '未填写'}><span className='edit_title'>简介</span></Item>
+          <InputItem placeholder="填写简介更容易获得关注哦~" value={user.introduction} onChange={(e) => {
+            setCount(count + 1)
+            setUser({ ...user, introduction: e })
+          }} >
+            简介
+          </InputItem>
         </List>
       </div>
-    </div>
+    </div >
   ) : ''
 }
 export default Edit

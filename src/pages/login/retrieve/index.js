@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { InputItem, Button } from 'antd-mobile'
+import { InputItem, Button, Toast, Icon } from 'antd-mobile'
 import api from '../../../api'
 import './style.less'
 const Retrieve = () => {
@@ -11,12 +11,15 @@ const Retrieve = () => {
   let interval = useRef();
   function send(email) {
     api.sendEmail({ email }).then(res => {
-      console.log(res)
+      setOff(true)
     })
   }
   function determine(data) {
     api.retrieve(data).then(res => {
-      console.log(res)
+      Toast.info('修改成功', 2, null, false)
+      setEmail('')
+      setCode('')
+      setPaw('')
     })
   }
   useEffect(() => {
@@ -38,13 +41,12 @@ const Retrieve = () => {
       <h1>找回密码</h1>
       <InputItem className='retrieve_email' placeholder='请输入邮箱' value={email} onChange={(e) => (setEmail(e))} >
         <span className={off ? 'reg_code code_active' : 'reg_code'} onClick={() => {
-          if (time) {
-            setOff(true)
-            if (time > 0) {
-              send(email)
-            }
+          if (email) {
+            if (!time >= 0) { send(email) }
+          } else {
+            Toast.info('邮箱不能为空', 2, null, false)
           }
-        }}>获取验证码{off ? time + 's' : ''}</span>
+        }}>{off ? `重新发送(${time})` : '获取验证码'}</span>
       </InputItem>
       <InputItem
         placeholder='请输入验证码'

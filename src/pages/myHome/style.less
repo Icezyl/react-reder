@@ -1,0 +1,74 @@
+.myHome {
+  position: relative;
+  z-index: 0;
+  .myHome_nav{
+    background: none;
+    position: fixed;
+    z-index: 1;
+    color: white;
+  }
+  .myHome_back {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1 ;
+  }
+  .myHome_my {
+    padding-top: calc(40% - 60px);
+    z-index: 2111;
+    .my_header {
+      display: flex;
+      align-items: flex-end;
+      justify-content:space-between;
+      margin:0 0 -40px 20px;
+      .my_img {
+        width: 80px;
+        height: 80px;
+        border: 2px solid white;
+        border-radius: 50%;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+      .my_but {
+        border-radius: 20px;
+        height: 25px;
+        line-height: 25px;
+        span {
+          font-size: 13px;
+        }
+      }
+      .but_icon {
+        margin-left: 5px;
+        border-radius: 50%;
+        background: #888888;
+        color: white;
+        padding: 0;
+        width: 25px;
+      }
+    }
+    .my_box {
+      background: white;
+      border-radius: 10px 10px 0 0;
+      padding: 50px 10px 5px;
+      .box_title {
+        font-weight: bolder;
+        font-size: 22px;
+        line-height: 28px;
+        height: 28px;
+      }
+      .box_brief {
+        color: #888888;
+        font-size: 14px;
+        height: 30px;
+        line-height: 30px;
+        width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}

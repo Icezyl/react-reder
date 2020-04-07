@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { List } from 'antd-mobile'
+import { List, Icon, NavBar } from 'antd-mobile'
 import { AppContext } from '../../reducer'
 import api from '../../api'
-import ws from '../../ws'
+import ws from '../../io'
 import './style.less'
 
 const Item = List.Item;
-const My = () => {
-  const [state, dispatch
-  ] = useContext(AppContext)
+const My = (props) => {
+  const [state, dispatch] = useContext(AppContext)
   const [user, setUser] = useState()
   useEffect(() => {
     api.users({ _id: state.id }).then(res => {
+      console.log(res)
       setUser(res.user)
     })
   }, [state.id])
@@ -20,16 +20,17 @@ const My = () => {
   }
   return user ? (
     <div className='my'>
-      <div className='my_tab' onClick={() => { console.log(1) }}>
+      <NavBar>我</NavBar>
+      <div className='my_tab' onClick={() => { props.history.push(`/myHome/${state.id}`) }}>
         <div className='my_img'>
           <img src={user.avatar} alt="" />
         </div>
         <div className='my_text'>
           <h1>{user.username}</h1>
-          <p>ddd</p>
+          <p>邮箱: {user.email}</p>
         </div>
       </div>
-      <List renderHeader={() => 'Icon in the left'}>
+      <List renderHeader={() => ''}>
         <Item
           thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
           onClick={() => { send() }}
@@ -48,7 +49,7 @@ const My = () => {
         >意见反馈</Item>
         <Item
           thumb="http://localhost:5000/setting.png"
-          onClick={() => { }}
+          onClick={() => { props.history.push('/setting') }}
         >设置</Item>
       </List>
     </div>

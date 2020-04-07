@@ -13,11 +13,11 @@ const Reg = (props) => {
   let interval = useRef();
   function send(email) {
     api.sendEmail({ email }).then(res => {
-      console.log(res)
+      setOff(true)
     })
   }
   function res() {
-    api.res({ username: name, passoword: paw }).then(res => {
+    api.res({ username: name, password: paw, email, code }).then(res => {
       Toast.info(res.msg, 2, null, false)
       if (res.code === 0) {
         setName('')
@@ -48,17 +48,16 @@ const Reg = (props) => {
         className="reg-input" placeholder="请输入密码" value={paw} onChange={(e) => (setPaw(e))} />
       <InputItem className="reg_email" placeholder="请输入邮箱" value={email} onChange={(e) => (setEmail(e))} >
         <span className={off ? 'reg_code code_active' : 'reg_code'} onClick={() => {
-          if (time) {
-            setOff(true)
-            if (time > 0) {
-              send(email)
-            }
+          if (email) {
+            if (!time >= 0) { send(email) }
+          } else {
+            Toast.info('邮箱不能为空', 2, null, false)
           }
-        }}>获取验证码{off ? time + 's' : ''}</span>
+        }}>{off ? `重新发送(${time})` : '获取验证码'}</span>
       </InputItem>
       <InputItem clear className="reg-input" placeholder="请输入验证码" value={code} onChange={(e) => (setCode(e))} />
       <div className="reg-help"><Link to="/login">已有账号登录</Link></div>
-      <Button type="primary" style={{ 'borderRadius': '5rem', "border": '1px solid #EEE' }} onClick={res} disabled={!(name && paw)}>注册</Button>
+      <Button type="primary" style={{ 'borderRadius': '5rem', "border": '1px solid #EEE' }} onClick={res} disabled={!(name && paw && email && code)}>注册</Button>
     </div>
   )
 }

@@ -18,7 +18,7 @@ instance.interceptors.response.use(response => {
   }
   return response
 }, (error) => {
-  console.log(error.response)
+  console.log(error)
   if (error.response) {
     Toast.info(error.response.data.msg, 2, null, false)
   }

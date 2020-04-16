@@ -14,19 +14,19 @@ const Edit = (props) => {
   useEffect(() => {
     userFind()
   }, [])
-  function userFind() {
+  const userFind = () => {
     api.users({ _id: state.id }).then((res) => {
       setUser(res.user)
       setsValue([res.user.sex])
     })
   }
-  function update(data) {
+  const update = (data) => {
     api.update(state.id, data).then(res => {
       Toast.info('修改成功', 2, null, false)
       props.history.go(-1)
     })
   }
-  function onChange(e) {
+  const onChange = (e) => {
     if (e.target.files.length) {
       var formData = new FormData()
       formData.append('file', e.target.files[0])
@@ -51,7 +51,7 @@ const Edit = (props) => {
               { text: '取消', onPress: () => console.log('cancel') },
               { text: '确定', onPress: () => props.history.go(-1) },
             ])
-          }else {
+          } else {
             props.history.go(-1)
           }
         }}

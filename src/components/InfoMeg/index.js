@@ -18,12 +18,12 @@ const InfoMeg = (props) => {
       })
     }
   }, [props])
-  function fun(id) {
+  const fun = (id) => {
     api.users({ _id: id }).then(res => {
       setUser(res.user)
     })
   }
-  function time(time) {
+  const time = (time) => {
     let date = new Date()
     let newtime = new Date(time)
     let year = newtime.getFullYear()

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { NavBar, Icon, List, Button } from 'antd-mobile'
 import './style.less'
 import { AppContext } from '../../reducer'
-
+import io from '../../io'
 const Item = List.Item
 const Setting = props => {
   const [state, dispatch] = useContext(AppContext)
@@ -26,6 +26,7 @@ const Setting = props => {
         dispatch({
           type: 'clearOut'
         })
+        io.emit('disconnection', { id: state.id })
       }}>退出登录</Button>
     </div >
   )

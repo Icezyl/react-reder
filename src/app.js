@@ -1,5 +1,5 @@
 import React, { Suspense, useReducer, useState, useEffect } from 'react';
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { LoadingV2 } from './components'
 import Routers from './routes'
 import reducer, { AppContext, initial } from './reducer'

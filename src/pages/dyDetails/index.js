@@ -1,14 +1,16 @@
-import React, { useEffect, useState, useContext, useRef } from 'react'
+import React, { useEffect, useState, useContext, useRef, useMemo } from 'react'
 import { NavBar, Icon, Button, TextareaItem, ListView, PullToRefresh } from 'antd-mobile'
 import api from '../../api'
 import { AppContext } from '../../reducer'
 import moment from '../../util/moment'
+import { useClickOutside } from '../../use'
 import './style.less'
 const DyDetails = props => {
   const [state] = useContext(AppContext)
   const [value, setValue] = useState()
   const [give, setGive] = useState({ count: 0, user: 0 })
   const [dynamic, setDynamic] = useState()
+  const [cross, setCross] = useState(false)
   const [comment, setComment] = useState([])
   const [focus, setFocus] = useState(true)
   const itemfocus = useRef(null)
@@ -18,24 +20,23 @@ const DyDetails = props => {
   const [dataSource, setDataSource] = useState(new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }))
-  useEffect(() => {
-    document.addEventListener('click', (e) => {
-      var tDom = e.target
-      var cDom = document.querySelector(".shulu_of");
-      if (cDom === tDom || cDom ? cDom.contains(tDom) : '') {
-      } else {
-        setFocus(true)
-      }
-    })
-  }, [])
+  const clickRef = useRef()
+  useClickOutside(clickRef, () => {
+    if (!focus) {
+      setFocus(true)
+    }
+  })
   useEffect(() => {
     api.dyId(props.match.params.id).then(res => {
       setDynamic(res.dynamic)
+      api.cross({ to: res.dynamic.userId._id, from: state.id }).then(res => {
+        setCross(res.count)
+      })
     })
     onRefresh()
     find()
   }, [props.match.params.id])
-  function onSend() {
+  const onSend = () => {
     if (value.trim().length) {
       api.comment({ id: dynamic._id, content: value, userId: state.id }).then(res => {
         onRefresh()
@@ -45,12 +46,12 @@ const DyDetails = props => {
 
     }
   }
-  function onGive() {
+  const onGive = () => {
     api.give({ id: props.match.params.id }).then(res => {
       find()
     })
   }
-  function onRefresh() {
+  const onRefresh = () => {
     setRefreshing(true)
     setIsLoading(true)
     api.allComment({ id: props.match.params.id }).then(res => {
@@ -60,7 +61,7 @@ const DyDetails = props => {
       setDataSource(dataSource.cloneWithRows(res.list))
     })
   }
-  function onEndReached(event) {
+  const onEndReached = (event) => {
     setPage(page => page + 1)
     setIsLoading(true)
     api.allComment({ id: props.match.params.id, page: page + 1 }).then(res => {
@@ -69,7 +70,7 @@ const DyDetails = props => {
       setDataSource(dataSource.cloneWithRows([...comment, ...res.list]))
     })
   }
-  function find() {
+  const find = () => {
     api.findGive({ id: props.match.params.id, userId: state.id }).then(res => {
       console.log(res)
       setGive(res)
@@ -99,7 +100,7 @@ const DyDetails = props => {
         }}
       >详情</NavBar>
       <div className='details_header'>
-        <div className='header_left'>
+        <div className='header_left' onClick={() => props.history.push(`/myHome/${dynamic.userId._id}`)}>
           <div className='header_img'><img src={dynamic.userId.avatar} alt=''></img></div>
           <div className='header_title'>
             <p className='title_name'>{dynamic.userId.username}</p>
@@ -109,7 +110,17 @@ const DyDetails = props => {
         <div className='header_right'>
           {
             dynamic.userId._id === state.id ? '' :
-              <Button inline size='small' className='button'>关注</Button>
+              <Button inline size='small' className='button' onClick={() => {
+                if (cross) {
+                  api.unFollowing(dynamic.userId._id).then(res => {
+                    setCross(false)
+                  })
+                } else {
+                  api.following(dynamic.userId._id).then(res => {
+                    setCross(true)
+                  })
+                }
+              }}>{cross ? '已关注' : '关注'}</Button>
           }
         </div>
       </div>
@@ -141,14 +152,14 @@ const DyDetails = props => {
       />
 
       <div className='details_shulu'>
-        {
-          focus ?
-            <div className='shulu_blur'>
-              <div className='blur_input' onClick={() => {
-                setFocus(false)
-                // itemfocus.current.focus()
-                console.log(itemfocus)
-              }}>说点什么吧...</div>
+        {focus ?
+          <div className='shulu_blur'>
+            <div className='blur_input' onClick={() => {
+              setFocus(false)
+              // itemfocus.current.focus()
+              console.log(focus)
+            }}>说点什么吧...</div>
+            <div className='shulu_right'>
               <span className={give.user ? 'iconfont icon-aixin1' : 'iconfont icon-aixin'} onClick={onGive}></span>
               <span className='icon_num'>{give.count ? give.count : '点赞'}</span>
               <span className='iconfont icon-pinglun' onClick={() => {
@@ -156,24 +167,23 @@ const DyDetails = props => {
               }}></span>
               <span className='icon_num'>{comment.length ? comment.length : '评论'}</span>
             </div>
-            :
-            <div className='shulu_of'>
-              <TextareaItem
-                ref={itemfocus}
-                placeholder='说点什么吧'
-                autoHeight
-                value={value}
-                onChange={(e) => setValue(e)}
-                onKeyDown={(e) => {
-                  if (e.keyCode === 13) { onSend() }
-                }}>
-              </TextareaItem>
-              {value ?
-                <Button inline size='small' type='primary' className='shulu_buttom' onClick={onSend}>发送</Button> : ''}
-            </div>
+          </div>
+          :
+          <div className='shulu_of' ref={clickRef}>
+            <TextareaItem
+              ref={itemfocus}
+              placeholder='说点什么吧'
+              autoHeight
+              value={value}
+              onChange={(e) => setValue(e)}
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) { onSend() }
+              }}>
+            </TextareaItem>
+            {value ?
+              <Button inline size='small' type='primary' className='shulu_buttom' onClick={onSend}>发送</Button> : ''}
+          </div>
         }
-
-
       </div>
     </div>
   ) : ''

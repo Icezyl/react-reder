@@ -20,6 +20,13 @@
       "unicode_decimal": 58905
     },
     {
+      "icon_id": "3603924",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
       "icon_id": "8106214",
       "name": "addto",
       "font_class": "addto",
@@ -260,7 +267,7 @@
     {
       "icon_id": "11372722",
       "name": "消息",
-      "font_class": "xiaoxi",
+      "font_class": "xiaoxi1",
       "unicode": "e8c9",
       "unicode_decimal": 59593
     },

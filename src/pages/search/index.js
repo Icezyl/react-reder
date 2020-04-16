@@ -11,7 +11,7 @@ const Search = (props) => {
   useEffect(() => {
     ser.current.focus()
   }, [])
-  function onSearch(name) {
+  const onSearch = (name) => {
     if (name.trim()) {
       api.search({ name, id: state.id }).then(res => {
         setList(res)
@@ -23,7 +23,7 @@ const Search = (props) => {
 
   const Info = props => {
     return (
-      <div className='info' onClick={props.onClick}>
+      <div className='info' onClick={() => props.onClick(props.user._id)}>
         <div className='left_img'>
           <img alt='' src={props.user.avatar}></img>
         </div>
@@ -48,7 +48,7 @@ const Search = (props) => {
           <div className='contacts'>
             <p className='title'>联系人</p>
             {list.map((item, index) => {
-              return <Info user={item} key={index}></Info>
+              return <Info user={item} key={index} onClick={(id) => props.history.push(`/myHome/${id}`)}></Info>
             })}
           </div>
           : <div hidden={!hiddin} style={{ textAlign: 'center', padding: '10px 0', color: '#888888' }}>没有找到相关内容</div>

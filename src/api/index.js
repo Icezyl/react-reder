@@ -236,6 +236,13 @@ const API = {
       method: 'get',
       params: data
     })
+  },
+  addFeedback(data) {
+    return axios({
+      url: '/addFeedback',
+      method: 'put',
+      data
+    })
   }
 }
 

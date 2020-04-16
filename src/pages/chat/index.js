@@ -63,15 +63,6 @@ const Chat = (props, ref) => {
     api.users({ _id: props.match.params.id }).then(res => {
       setUser(res.user)
     })
-    io.on('chat', data => {
-      if (box.current) {
-        setList([...list, data])
-        Clear()
-        setTimeout(() => {
-          box.current.scrollTop = box.current.scrollHeight
-        }, 100)
-      }
-    })
     let tt = setTimeout(() => {
       box.current.scrollTop = box.current.scrollHeight
     }, 100)
@@ -79,12 +70,21 @@ const Chat = (props, ref) => {
       clearTimeout(tt)
     }
   }, [])
-  function Clear() {
+  io.on('chat', data => {
+    if (box.current) {
+      setList([...list, data])
+      Clear()
+      setTimeout(() => {
+        box.current.scrollTop = box.current.scrollHeight
+      }, 100)
+    }
+  })
+  const Clear = () => {
     api.clearSee({ from: props.match.params.id, to: state.id })
     let messageId = [props.match.params.id, state.id].sort().join('_')
     io.emit('clearSee', { messageId, to: state.id })
   }
-  function onChange(e) {
+  const onChange = (e) => {
     if (e.target.files.length) {
       var formData = new FormData()
       formData.append('file', e.target.files[0])

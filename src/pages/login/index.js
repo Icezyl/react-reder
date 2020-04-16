@@ -1,21 +1,46 @@
-import React, { lazy, Suspense } from 'react'
+import React, { useState, useContext } from 'react'
 import './style.less'
-import { Switch, Route } from 'react-router-dom'
-import { LoadingV2 } from '../../components'
-
-const Sign = lazy(() => import('./sign'))
-const Reg = lazy(() => import('./reg'))
-const Retrieve = lazy(() => import('./retrieve'))
-const Login = () => {
+import { InputItem, Button, Toast } from 'antd-mobile'
+import { Link } from 'react-router-dom'
+import api from '../../api'
+import io from '../../io'
+import { AppContext } from '../../reducer'
+const Login = (props) => {
+  const [state, dispatch] = useContext(AppContext)
+  const [email, setEmail] = useState()
+  const [paw, setPaw] = useState()
+  const login = () => {
+    api.login({ email, password: paw }).then(res => {
+      Toast.info(res.msg, 2, null, false)
+      dispatch({
+        type: 'setToken',
+        payload: { token: res.token, id: res.user._id, user: res.user }
+      })
+      api.messageFindId(res.user._id).then(res => {
+        dispatch({
+          type: 'setMessageList',
+          payload: { messageList: res.list }
+        })
+      })
+      api.allSee(res.user._id).then(res => {
+        dispatch({
+          type: 'setAddBadge',
+          payload: { badge: res.count }
+        })
+      })
+      props.history.push('/')
+    })
+  }
   return (
-    <div className="login">
-      <Suspense fallback={<LoadingV2 />}>
-        <Switch>
-          <Route path="/login/reg" component={Reg}></Route>
-          <Route path='/login/retrieve' component={Retrieve}></Route>
-          <Route path="/login" component={Sign}></Route>
-        </Switch>
-      </Suspense>
+    <div className="sign">
+      <h1>Reder</h1>
+      <InputItem clear className="sign-input" placeholder="请输入邮箱" value={email} onChange={(e) => (setEmail(e))} />
+      <InputItem type="password"
+        className="sign-input" placeholder="请输入密码" value={paw} onChange={(e) => (setPaw(e))} onKeyDown={(e) => {
+          if (e.keyCode === 13) { login() }
+        }} />
+      <div className="sign-help"><Link to="/retrieve">忘记密码</Link><Link to="/reg">用户注册</Link></div>
+      <Button type="primary" style={{ 'borderRadius': '5rem', "border": '1px solid #EEE' }} onClick={login} disabled={!(email && paw)}>登录</Button>
     </div>
   )
 }

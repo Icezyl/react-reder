@@ -14,7 +14,7 @@ const G = () => {
   useEffect(() => {
     onRefresh()
   }, [])
-  function onRefresh() {
+  const onRefresh = () => {
     setRefreshing(true)
     setIsLoading(true)
     api.dyList({ page: 1 }).then(res => {
@@ -24,7 +24,7 @@ const G = () => {
       setDataSource(dataSource.cloneWithRows(res.list))
     })
   }
-  function onEndReached(event) {
+  const onEndReached = (event) => {
     setPage(page => page + 1)
     setIsLoading(true)
     api.dyList({ page: page + 1 }).then(res => {

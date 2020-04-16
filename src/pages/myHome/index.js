@@ -23,12 +23,12 @@ const MyHome = props => {
     }
 
   }, [props.match.params.id, state.id])
-  function following() {
+  const following = () => {
     api.following(props.match.params.id).then(res => {
       setFollow(1)
     })
   }
-  function unFollowing() {
+  const unFollowing = () => {
     api.unFollowing(props.match.params.id).then(res => {
       setFollow(0)
     })
@@ -56,7 +56,7 @@ const MyHome = props => {
                   :
                   <span className={'iconfont icon-aixin'} onClick={following}> 关注</span>}
             </Button>
-            <Button inline className='my_but but_icon' size='small' onClick={() => props.history.push(`/chat/${props.match.params.id}`)}><span className='iconfont icon-cebianlan_liaotianliebiao' /></Button>
+            <Button inline className='my_but but_icon' size='small' onClick={() => props.history.push(`/chat/${props.match.params.id}`)}><span className='iconfont icon-xiaoxi' /></Button>
           </div>
         </div>
         <div className='my_box'>

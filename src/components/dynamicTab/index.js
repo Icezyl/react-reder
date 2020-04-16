@@ -13,7 +13,7 @@ const DynamicTab = props => {
       countComment()
     }
   }, [])
-  function onGive() {
+  const onGive = () => {
     api.give({ id: props.list._id }).then(res => {
       find()
     })
@@ -40,12 +40,12 @@ const DynamicTab = props => {
       props.onRefresh()
     })
   }
-  function find() {
+  const find = () => {
     api.findGive({ id: props.list._id, userId: props.id }).then(res => {
       setGive(res)
     })
   }
-  function countComment() {
+  const countComment = () => {
     api.countComment({ id: props.list._id }).then(res => {
       setComment(res)
     })

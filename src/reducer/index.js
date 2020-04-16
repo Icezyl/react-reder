@@ -28,7 +28,6 @@ const reducer = (state, action) => {
       return { ...state, messageList: payload.messageList }
     case 'setAddBadge':
       let tabBarList = state.tabBarList
-      console.log(tabBarList)
       tabBarList[2].badge = payload.badge
       return { ...state, tabBarList }
     case 'clearOut':

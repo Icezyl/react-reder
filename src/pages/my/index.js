@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, memo } from 'react'
 import { List, Icon, NavBar } from 'antd-mobile'
 import { AppContext } from '../../reducer'
 import api from '../../api'
@@ -15,7 +15,7 @@ const My = (props) => {
       setUser(res.user)
     })
   }, [state.id])
-  function send() {
+  const send = () => {
     ws.send({ sendId: '123', receiveId: '321', text: '222' }, dispatch)
   }
   return user ? (
@@ -37,15 +37,7 @@ const My = (props) => {
         >消息中心</Item>
         <Item
           thumb="http://localhost:5000/setting.png"
-          onClick={() => { }}
-        >My Cost Ratio</Item>
-        <Item
-          thumb="http://localhost:5000/setting.png"
-          onClick={() => { }}
-        ></Item>
-        <Item
-          thumb="http://localhost:5000/setting.png"
-          onClick={() => { }}
+          onClick={() => { props.history.push('/feedback') }}
         >意见反馈</Item>
         <Item
           thumb="http://localhost:5000/setting.png"
@@ -55,4 +47,4 @@ const My = (props) => {
     </div>
   ) : ''
 }
-export default My
+export default memo(My)

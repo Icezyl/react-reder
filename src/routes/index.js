@@ -12,12 +12,19 @@ const Friends = lazy(() => import('../pages/friends'))
 const DyDetails = lazy(() => import('../pages/dyDetails'))
 const Voice = lazy(() => import('../pages/voice'))
 const Matching = lazy(() => import('../pages/matching'))
+const Reg = lazy(() => import('../pages/reg'))
+const Retrieve = lazy(() => import('../pages/retrieve'))
+const Feedback = lazy(() => import('../pages/feedback'))
+
 
 
 export default [
   { path: '/login', name: 'Login', component: Login, exact: false },
+  { path: '/retrieve', name: 'Retrieve', component: Retrieve, exact: false },
+  { path: '/reg', name: 'Reg', component: Reg, exact: false },
   { path: '/demo', name: 'Demo', component: Demo, auth: true, exact: false },
   { path: '/setting', name: 'Setting', component: Setting, auth: true, exact: false },
+  { path: '/feedback', name: 'Feedback', component: Feedback, auth: true, exact: false },
   { path: '/search', name: 'Search', component: Search, auth: true, exact: false },
   { path: '/send', name: 'Send', component: Send, auth: true, exact: false },
   { path: '/friend', name: 'Friend', component: Friends, auth: true, exact: false },

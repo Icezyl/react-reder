@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import './style.less'
 import { InputItem, Button, Toast } from 'antd-mobile'
 import { Link } from 'react-router-dom'
-import api from '../../../api'
+import api from '../../api'
 const Reg = (props) => {
   const [name, setName] = useState()
   const [paw, setPaw] = useState()
@@ -11,12 +11,12 @@ const Reg = (props) => {
   const [time, setTime] = useState(60)
   const [off, setOff] = useState(false)
   let interval = useRef();
-  function send(email) {
+  const send = (email) => {
     api.sendEmail({ email }).then(res => {
       setOff(true)
     })
   }
-  function res() {
+  const res = () => {
     api.res({ username: name, password: paw, email, code }).then(res => {
       Toast.info(res.msg, 2, null, false)
       if (res.code === 0) {
@@ -49,7 +49,7 @@ const Reg = (props) => {
       <InputItem className="reg_email" placeholder="请输入邮箱" value={email} onChange={(e) => (setEmail(e))} >
         <span className={off ? 'reg_code code_active' : 'reg_code'} onClick={() => {
           if (email) {
-            if (!time >= 0) { send(email) }
+            if (!off) { send(email) }
           } else {
             Toast.info('邮箱不能为空', 2, null, false)
           }

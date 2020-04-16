@@ -11,7 +11,7 @@ const Loading = () => {
   )
 }
 
-function createLoading() {
+const createLoading = () => {
   let div = null;
   let loadingCount = 0;
   return {

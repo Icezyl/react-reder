@@ -1,21 +1,22 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
-import { NavBar, Icon, TextareaItem, ImagePicker, Toast } from 'antd-mobile'
-import { AppContext } from '../../reducer'
+import React, { useState, useEffect, useContext } from 'react'
+import { NavBar, Icon, TextareaItem, ImagePicker, Toast, Button } from 'antd-mobile'
 import api from '../../api'
+import { AppContext } from '../../reducer'
 import './style.less'
-const Send = props => {
+const Feedback = props => {
   const [state, dispatch] = useContext(AppContext)
-  const [token, setToken] = useState()
+
   const [value, setValue] = useState()
   const [data, setData] = useState([])
+  const [token, setToken] = useState()
+  const onChange = (files) => {
+    setData(files)
+  }
   useEffect(() => {
     api.yunToken().then(res => {
       setToken(res.token)
     })
   })
-  const onChange = (files) => {
-    setData(files)
-  }
   const onSend = () => {
     var imgs = []
     if (data.length) {
@@ -39,7 +40,7 @@ const Send = props => {
     }
   }
   const send = (data) => {
-    api.dySend(data).then(res => {
+    api.addFeedback(data).then(res => {
       if (res.ok) {
         Toast.info('发送成功', 2, null, false)
         props.history.push('/dynamic')
@@ -47,30 +48,25 @@ const Send = props => {
     })
   }
   return (
-    <div className='send'>
+    <div className='feedback'>
       <NavBar
-        mode='light'
-        rightContent={[
-          <span key='0' onClick={onSend}>发布</span>
-        ]}
-        onLeftClick={() => { props.history.go(-1) }}
-        icon={<Icon type='cross' />}
-      />
+        icon={<Icon type="left" />}
+        onLeftClick={() => props.history.go(-1)}
+        mode='light'>意见反馈</NavBar>
       <TextareaItem
-        autoHeight
-        count={500}
-        placeholder={'此刻你想说...'}
+        rows={5}
+        placeholder={'请补充详细问题和意见'}
         onChange={(e) => {
           setValue(e)
-        }}
-      />
+        }} />
       <ImagePicker
         files={data}
         onChange={onChange}
         selectable={data.length < 4}
         multiple
       />
-    </div>
+      <p className='feedback_but'><Button type='primary' onClick={onSend}>提交</Button></p>
+    </div >
   )
 }
-export default Send
+export default Feedback

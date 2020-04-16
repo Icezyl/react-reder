@@ -16,7 +16,7 @@ const Follow = props => {
   useEffect(() => {
     onRefresh()
   }, [])
-  function apis(e = 0) {
+  const apis = (e = 0) => {
     if (props.follow) {
       return api.dyFollow({ id: state.id, page: e })
     } else if (props.user) {
@@ -25,7 +25,7 @@ const Follow = props => {
       return api.dyList({ page: e })
     }
   }
-  function onRefresh() {
+  const onRefresh = () => {
     setRefreshing(true)
     setIsLoading(true)
     apis().then(res => {
@@ -35,7 +35,7 @@ const Follow = props => {
       setDataSource(dataSource.cloneWithRows(res.list))
     })
   }
-  function onEndReached(event) {
+  const onEndReached = (event) => {
     setPage(page => page + 1)
     setIsLoading(true)
     apis(page + 1).then(res => {

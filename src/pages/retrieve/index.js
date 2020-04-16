@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { InputItem, Button, Toast, Icon } from 'antd-mobile'
-import api from '../../../api'
+import api from '../../api'
 import './style.less'
 const Retrieve = () => {
   const [email, setEmail] = useState()
@@ -9,12 +9,12 @@ const Retrieve = () => {
   const [time, setTime] = useState(60)
   const [off, setOff] = useState(false)
   let interval = useRef();
-  function send(email) {
+  const send = (email) => {
     api.sendEmail({ email }).then(res => {
       setOff(true)
     })
   }
-  function determine(data) {
+  const determine = (data) => {
     api.retrieve(data).then(res => {
       Toast.info('修改成功', 2, null, false)
       setEmail('')
@@ -42,7 +42,7 @@ const Retrieve = () => {
       <InputItem className='retrieve_email' placeholder='请输入邮箱' value={email} onChange={(e) => (setEmail(e))} >
         <span className={off ? 'reg_code code_active' : 'reg_code'} onClick={() => {
           if (email) {
-            if (!time >= 0) { send(email) }
+            if (!off) { send(email) }
           } else {
             Toast.info('邮箱不能为空', 2, null, false)
           }
